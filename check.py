@@ -1,3 +1,5 @@
+#使用mediapipe偵測train裡面的圖片
+
 import cv2
 import mediapipe as mp
 import math
@@ -24,7 +26,7 @@ pose = mp_pose.Pose(static_image_mode=True)
 mp_drawing = mp.solutions.drawing_utils
 
 # 測試圖片路徑（請換成你 Train 裡的某張圖片）
-img_path = "D:\fitness\FitnessApp\train\yt-IODxDxX7oi4-0004_jpg.rf.48f8addf51e424b98edab54d18903652.jpg"
+img_path = "D:\fitness\FitnessApp\train\yt-IODxDxX7oi4-0108_jpg.rf.0888418a8faba86b2a7204de977fb35d.jpg"
 
 img = cv2.imread(img_path)
 if img is None:
