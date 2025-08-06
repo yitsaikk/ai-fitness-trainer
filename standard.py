@@ -1,3 +1,5 @@
+#利用mediapipe讀取影片中 深蹲時膝蓋的角度
+
 import cv2
 import mediapipe as mp
 import math
@@ -8,7 +10,7 @@ pose = mp_pose.Pose()
 mp_drawing = mp.solutions.drawing_utils
 
 # 影片路徑
-video_path = "https://rr4---sn-vgqsrnld.googlevideo.com/videoplayback?expire=1754396991&ei=36SRaPXyLYjbp-oPzNPbmQw&ip=89.117.115.104&id=o-AO13Mwuv9Lct_vER9M4ieVytiHKgqj4SCChO1XRYWPDk&itag=137&aitags=133%2C134%2C135%2C136%2C137%2C160%2C242%2C243%2C244%2C247%2C248%2C278%2C394%2C395%2C396%2C397%2C398%2C399&source=youtube&requiressl=yes&xpc=EgVo2aDSNQ%3D%3D&siu=1&bui=AY1jyLO-SNKiEssiQpQ1Zqgvr1QQ2L48vCXOKaySwev5GGpTZXw-omS6bKJzxy_rWD1Yo6dT9Q&spc=l3OVKYe7KIRF&vprv=1&svpuc=1&mime=video%2Fmp4&ns=AJB2RquilrQWqe5gJJiSGXoQ&rqh=1&gir=yes&clen=2206156&dur=60.059&lmt=1748065061554489&keepalive=yes&c=TVHTML5_SIMPLY_EMBEDDED_PLAYER&sefc=1&txp=4432534&n=cbBIfMrOL63UrA&sparams=expire%2Cei%2Cip%2Cid%2Caitags%2Csource%2Crequiressl%2Cxpc%2Csiu%2Cbui%2Cspc%2Cvprv%2Csvpuc%2Cmime%2Cns%2Crqh%2Cgir%2Cclen%2Cdur%2Clmt&sig=AJfQdSswRgIhAMBZrEyJGpr-zzGgLYnKQ0UeoSWSyLWCxXHldNgC31pPAiEA8h4s23_HF8MmBzWaTP6h5i2NOBDTk8rWZBKYARvExMg%3D&title=The+Air+Squat&redirect_counter=1&cm2rm=sn-4g5erl7e&rrc=80&fexp=24350590,24350737,24350827,24351316,24351318,24351528,24352220,24352460,24352468,24352517,24352519,24352559,24352568,24352573,24352961&req_id=a7235920e7eca3ee&cms_redirect=yes&cmsv=e&met=1754375401,&mh=w2&mip=36.224.98.232&mm=34&mn=sn-vgqsrnld&ms=ltu&mt=1754373598&mv=D&mvi=4&pl=0&rms=ltu,au&lsparams=met,mh,mip,mm,mn,ms,mv,mvi,pl,rms&lsig=APaTxxMwRAIgQ89Us18IkSlI8v8aOWtzLXfMRWRJ627k3GCoT15ckasCIAwKMklOFhu4WGuN6eX8YVx8_ypqNfWGtBnOv3-Qhm_2"  # ← 改成你的影片檔名
+video_path = "D:\\fitness\\exampleVideo\\airsquat.mp4"
 cap = cv2.VideoCapture(video_path)
 
 # 計算角度的函式
