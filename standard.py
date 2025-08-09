@@ -12,6 +12,9 @@ mp_drawing = mp.solutions.drawing_utils
 # 影片路徑
 video_path = "D:\\fitness\\exampleVideo\\airsquat.mp4"
 cap = cv2.VideoCapture(video_path)
+out_txt = "knee_angles.txt"
+scale = 0.6
+frame_idx = 0 #幀數編號 預設為0，用來影片當前處理到的第幾幀
 
 # 計算角度的函式
 def calculate_angle(a, b, c):
@@ -23,29 +26,47 @@ def calculate_angle(a, b, c):
     angle = math.acos(dot / (norm_ba * norm_bc))
     return round(math.degrees(angle), 2)
 
+if not cap.isOpened():
+    print("無法開啟影片")
+
+#影片幀數擷取 或 預設為30
+fps = cap.get(cv2.CAP_PROP_FPS) or 30.0
+
+with open(out_txt, "w",encoding="utf-8") as f:
+    f.write("# frame\tseconds\tright_knee\tleft_knee\n")
+
+
 while cap.isOpened():
     ret, frame = cap.read()
     if not ret:
         break
 
     # 將畫面縮小 60%
-    frame = cv2.resize(frame, None, fx=0.6, fy=0.6)
-
+    frame = cv2.resize(frame, None, fx=scale, fy=scale)
     img_rgb = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
+    h, w = frame.shape[:2] #取得影像的高度跟寬度
     results = pose.process(img_rgb)
+    r_knee = l_knee =None #右膝 左膝角度預設0
 
     if results.pose_landmarks:
         mp_drawing.draw_landmarks(frame, results.pose_landmarks, mp_pose.POSE_CONNECTIONS)
-
         # 取得右腿關鍵點：髖(24)、膝(26)、踝(28)
         landmarks = results.pose_landmarks.landmark
-        hip = [landmarks[24].x * frame.shape[1], landmarks[24].y * frame.shape[0]]
-        knee = [landmarks[26].x * frame.shape[1], landmarks[26].y * frame.shape[0]]
-        ankle = [landmarks[28].x * frame.shape[1], landmarks[28].y * frame.shape[0]]
 
-        angle = calculate_angle(hip, knee, ankle)
-        cv2.putText(frame, f'Knee Angle: {angle}', tuple(map(int, knee)),
-                    cv2.FONT_HERSHEY_SIMPLEX, 0.8, (0, 255, 255), 2)
+        def pt(i) :return(landmarks[i].x*w, landmarks[i].y*h)
+
+        r_hip, r_knee, r_ankle = pt(24), pt(26), pt(28)
+        l_hip, l_knee, l_ankle = pt(23), pt(25), pt(27)
+        r_knee = calculate_angle(r_hip, r_knee, r_ankle)
+        l_knee = calculate_angle(l_hip, l_knee, l_ankle)
+        
+        seconds = round(frame_idx / fps, 3)
+        with open(out_txt, "a", encoding="utf-8") as f:
+            f.write(f"{frame_idx}\t{seconds}\t{r_knee if r_knee is not None else 'NA'}\t{l_knee if l_knee is not None else 'NA'}\n")
+
+
+
+       #cv2.FONT_HERSHEY_SIMPLEX, 0.8, (0, 255, 255), 2)
 
     cv2.imshow("Pose with Knee Angle", frame)
     if cv2.waitKey(1) & 0xFF == ord('q'):
