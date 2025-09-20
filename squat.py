@@ -60,7 +60,7 @@ def calculate_angle(a, b, c):
 
     return angle
 
-# 載入影片 (或使用攝影機) 放自己測試的影片
+# 載入影片 (或使用攝影機)
 video_path = r"C:\Users\User\Desktop\AI專題\訓練資料\徒手深蹲.mp4"
 cap = cv2.VideoCapture(video_path)
 
